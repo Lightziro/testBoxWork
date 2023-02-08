@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Калькулятор ящиков для бутылок</title>
+</head>
+<body>
+<label>Количество бутылок</label>
+<input type="number" min="1" max="5000" id="number">
+<button id="send">Отправить</button>
+<div id="output"></div>
+</body>
+<script src="https://unpkg.com/axios/dist/axios.min.js" defer></script>
+<script>
+    const input = document.getElementById('number');
+    const btn = document.getElementById('send');
+    const outputElement = document.getElementById('output');
+    btn.addEventListener('click', async () => {
+        outputElement.innerHTML = ';'
+        const response = await axios.get(`http://127.0.0.1/index.php?number=${input.value}`);
+        const data = response.data;
+        const notEmptyBoxes = data.filter(item => item.count !== 0);
+        notEmptyBoxes.forEach(item => {
+            const e = document.createElement('p');
+            e.textContent = `Ящик ${item.box} - ${item.count} шт.`;
+            outputElement.append(e);
+        });
+    });
+</script>
+</html>

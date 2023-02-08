@@ -1,0 +1,27 @@
+version: "3.3"
+
+services:
+  backend:
+    image: fgh151/php:8.2-dev
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - app
+    ports:
+      - 9000:9000
+  nginx:
+    container_name: nginx
+    image: nginx:1.19-alpine
+    restart: unless-stopped
+    ports:
+      - '80:80'
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - app
+
+networks:
+  app:
+    driver: bridge
